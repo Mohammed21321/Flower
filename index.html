@@ -48,9 +48,20 @@
       ctx.strokeStyle = 'pink';
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
+
       const x1 = centerX + petalRadius * Math.cos(radianAngle);
       const y1 = centerY + petalRadius * Math.sin(radianAngle);
       ctx.lineTo(x1, y1);
+
+      const petalBaseX = centerX + (petalRadius / 2) * Math.cos(radianAngle);
+      const petalBaseY = centerY + (petalRadius / 2) * Math.sin(radianAngle);
+
+      const shorterLineLength = petalRadius / 3;
+
+      ctx.lineTo(petalBaseX + shorterLineLength * Math.cos(radianAngle - Math.PI / 2), petalBaseY + shorterLineLength * Math.sin(radianAngle - Math.PI / 2));
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(petalBaseX + shorterLineLength * Math.cos(radianAngle + Math.PI / 2), petalBaseY + shorterLineLength * Math.sin(radianAngle + Math.PI / 2));
+      
       ctx.stroke();
 
       currentPetal++;
