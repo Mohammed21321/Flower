@@ -13,7 +13,7 @@
       display: block;
     }
   </style>
-  <title>Sequential Petal Drawing</title>
+  <title>Sequential Line Drawing</title>
 </head>
 <body>
   <canvas id="flowerCanvas"></canvas>
@@ -28,24 +28,12 @@
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const stemLength = 150;
-    const petalCount = 5;
-    const petalRadius = 75;
-    const initialShiftPercentage = 2;
+    const initialShiftPercentage = 0;
     const shiftPercentageIncrement = 2;
     const lineColor = 'pink';
-    const petalLength = 100; // Reverted to the original shorter length
 
-    function drawStem() {
-      ctx.strokeStyle = 'green';
-      ctx.lineWidth = 5;
-      ctx.beginPath();
-      ctx.moveTo(centerX, centerY);
-      ctx.lineTo(centerX, centerY + stemLength);
-      ctx.stroke();
-    }
-
-    function drawPetalWithShift(startX, startY, shiftPercentage, callback) {
-      const angle = (360 / petalCount) * Math.PI / 180;
+    function drawLineWithShift(startX, startY, shiftPercentage, callback) {
+      const angle = 0;
       const startingAngle = angle * shiftPercentage / 100;
 
       ctx.strokeStyle = lineColor;
@@ -53,57 +41,57 @@
       ctx.beginPath();
       ctx.moveTo(startX, startY);
 
-      const x1 = startX + petalLength * Math.cos(startingAngle);
-      const y1 = startY + petalLength * Math.sin(startingAngle);
+      const lineLength = 100; // Adjust the length of the lines
+
+      const x1 = startX + lineLength * Math.cos(startingAngle);
+      const y1 = startY + lineLength * Math.sin(startingAngle);
       ctx.lineTo(x1, y1);
 
-      const petalBaseX = startX + (petalRadius / 2) * Math.cos(startingAngle);
-      const petalBaseY = startY + (petalRadius / 2) * Math.sin(startingAngle);
+      const shorterLineLength = lineLength / 2;
 
-      const shorterLineLength = petalRadius / 3;
-
-      ctx.lineTo(
-        petalBaseX + shorterLineLength * Math.cos(startingAngle - Math.PI / 2),
-        petalBaseY + shorterLineLength * Math.sin(startingAngle - Math.PI / 2)
-      );
       ctx.moveTo(startX, startY);
       ctx.lineTo(
-        petalBaseX + shorterLineLength * Math.cos(startingAngle + Math.PI / 2),
-        petalBaseY + shorterLineLength * Math.sin(startingAngle + Math.PI / 2)
+        x1 + shorterLineLength * Math.cos(startingAngle - Math.PI / 2),
+        y1 + shorterLineLength * Math.sin(startingAngle - Math.PI / 2)
+      );
+
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(
+        x1 + shorterLineLength * Math.cos(startingAngle + Math.PI / 2),
+        y1 + shorterLineLength * Math.sin(startingAngle + Math.PI / 2)
       );
 
       ctx.stroke();
 
-      // Execute the callback function after drawing the petal
+      // Execute the callback function after drawing the line
       if (callback) {
-        setTimeout(callback, 1000); // Adjusted delay
+        setTimeout(callback, 500); // Adjusted delay
       }
     }
 
-    function drawFlowerWithShifts() {
-      drawStem();
-      const initialX = centerX;
-      const initialY = centerY + stemLength;
-
-      // Draw initial line
-      drawPetalWithShift(initialX, initialY, initialShiftPercentage, function() {
-        let currentIndex = 0;
-
-        // Draw copies of the initial line at different positions
-        function drawCopies() {
-          if (currentIndex < petalCount - 1) {
-            drawPetalWithShift(initialX, initialY, initialShiftPercentage + (currentIndex + 1) * shiftPercentageIncrement, function() {
-              currentIndex++;
-              drawCopies();
-            });
-          }
+    function drawFlowerLinesWithShifts(shift, currentIndex, maxShift, callback) {
+      if (shift <= maxShift) {
+        drawLineWithShift(centerX, centerY, shift, function() {
+          drawFlowerLinesWithShifts(shift + 2, currentIndex + 1, maxShift, callback);
+        });
+      } else if (currentIndex < 4) {
+        // Shift main four lines by 2%, 4%, 6%, and 8%
+        drawFlowerLinesWithShifts(2 * (currentIndex + 1), 0, maxShift, callback);
+      } else {
+        // Execute the final callback
+        if (callback) {
+          setTimeout(callback, 500); // Adjusted delay
         }
+      }
+    }
 
-        drawCopies();
+    function drawFlower() {
+      drawLineWithShift(centerX, centerY - stemLength, initialShiftPercentage, function() {
+        drawFlowerLinesWithShifts(initialShiftPercentage + shiftPercentageIncrement, 0, 10, null);
       });
     }
 
-    drawFlowerWithShifts();
+    drawFlower();
 
   </script>
 </body>
