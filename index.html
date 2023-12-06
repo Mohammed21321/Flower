@@ -32,12 +32,14 @@
     const petalRadius = 75; // Increased petal size
     const initialDrawingSpeed = 560; // Initial drawing speed
     const additionalDrawingSpeed = 0.75; // Additional drawing speed increase
-    const shiftPercentage = 2; // Drawing shift percentage
-    const lineThicknessIncrease = 0.1; // Line thickness increase
+    const shiftPercentage = 4; // Initial drawing shift percentage
+    const shiftPercentageIncrement = 2; // Incremental shift percentage
+    const lineThicknessIncrease = 0.05; // Reverted to 5% line thickness increase
     const backgroundColor = 'skyblue'; // Sky blue background color
 
     let currentPetal = 0;
     let currentDrawingSpeed = initialDrawingSpeed;
+    let currentShiftPercentage = shiftPercentage;
 
     function drawStem() {
       ctx.strokeStyle = 'green';
@@ -92,22 +94,27 @@
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
 
-      const x1 = centerX + petalRadius * Math.cos(radianAngle);
-      const y1 = centerY + petalRadius * Math.sin(radianAngle);
+      const shiftedX = centerX + (petalRadius / 100) * currentShiftPercentage * Math.cos(radianAngle);
+      const shiftedY = centerY + (petalRadius / 100) * currentShiftPercentage * Math.sin(radianAngle);
+
+      const x1 = shiftedX + petalRadius * Math.cos(radianAngle);
+      const y1 = shiftedY + petalRadius * Math.sin(radianAngle);
+
       ctx.lineTo(x1, y1);
 
-      const petalBaseX = centerX + (petalRadius / 2) * Math.cos(radianAngle);
-      const petalBaseY = centerY + (petalRadius / 2) * Math.sin(radianAngle);
+      const petalBaseX = shiftedX + (petalRadius / 2) * Math.cos(radianAngle);
+      const petalBaseY = shiftedY + (petalRadius / 2) * Math.sin(radianAngle);
 
       const shorterLineLength = petalRadius / 3;
 
       ctx.lineTo(petalBaseX + shorterLineLength * Math.cos(radianAngle - Math.PI / 2), petalBaseY + shorterLineLength * Math.sin(radianAngle - Math.PI / 2));
-      ctx.moveTo(centerX, centerY);
+      ctx.moveTo(shiftedX, shiftedY);
       ctx.lineTo(petalBaseX + shorterLineLength * Math.cos(radianAngle + Math.PI / 2), petalBaseY + shorterLineLength * Math.sin(radianAngle + Math.PI / 2));
-      
+
       ctx.stroke();
 
       currentPetal++;
+      currentShiftPercentage += shiftPercentageIncrement; // Increment shift percentage
 
       if (currentPetal < petalCount) {
         setTimeout(drawShiftedPetal, currentDrawingSpeed); // Adjusted delay
