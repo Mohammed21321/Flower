@@ -13,7 +13,7 @@
       display: block;
     }
   </style>
-  <title>Flower Drawing</title>
+  <title>Delayed Flower Drawing</title>
 </head>
 <body>
   <canvas id="flowerCanvas"></canvas>
@@ -36,29 +36,50 @@
       return path;
     }
 
-    function drawPetals(x, y, count, startAt, petal) {
+    function drawPetals(x, y, count, startAt, petal, delay) {
       const step = (Math.PI * 2) / count;
       ctx.setTransform(1, 0, 0, 1, x, y);
       ctx.rotate(startAt);
-      for (let i = 0; i < count; i += 1) {
-        ctx.stroke(petal);
-        ctx.rotate(step);
+
+      function drawPetalWithDelay(i) {
+        if (i < count) {
+          ctx.stroke(petal);
+          ctx.rotate(step);
+          setTimeout(() => drawPetalWithDelay(i + 1), delay);
+        }
       }
+
+      drawPetalWithDelay(0);
+
       ctx.setTransform(1, 0, 0, 1, 0, 0);  // restore default
     }
 
-    function drawFlower(col, lineWidth, fitScale, petalCount) {
+    function drawFlower(col, lineWidth, fitScale, petalCount, delay) {
       ctx.strokeStyle = col;
       ctx.lineWidth = lineWidth;
       const size = Math.min(ctx.canvas.width, ctx.canvas.height) * fitScale * 0.5;
-      drawPetals(ctx.canvas.width / 2, ctx.canvas.height / 2, petalCount, 0, createPetal(size, size * 0.2));
+      const centerX = ctx.canvas.width / 2;
+      const centerY = ctx.canvas.height / 2;
+
+      // Draw stem
+      ctx.strokeStyle = 'green';
+      ctx.lineWidth = 5;
       ctx.beginPath();
-      ctx.arc(ctx.canvas.width / 2, ctx.canvas.height / 2, size * 0.15, 0, Math.PI * 2);
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(centerX, centerY + size * 1.5);
+      ctx.stroke();
+
+      // Draw petals
+      drawPetals(centerX, centerY, petalCount, 0, createPetal(size, size * 0.2), delay);
+      
+      // Draw flower center
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, size * 0.15, 0, Math.PI * 2);
       ctx.fillStyle = col;
       ctx.fill();
     }
 
-    drawFlower("pink", 4, 0.95, 5);
+    drawFlower("pink", 4, 0.95, 5, 500);
   </script>
 </body>
 </html>
