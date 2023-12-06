@@ -85,8 +85,10 @@
 
       function drawNextPetal() {
         if (currentIndex < petalCount) {
-          drawPetalWithShift(initialShiftPercentage + currentIndex * shiftPercentageIncrement, drawNextPetal);
-          currentIndex++;
+          drawPetalWithShift(initialShiftPercentage + currentIndex * shiftPercentageIncrement, function() {
+            currentIndex++;
+            drawNextPetal();
+          });
         }
       }
 
