@@ -32,15 +32,16 @@
     const petalRadius = 75; // Increased petal size
     const initialDrawingSpeed = 560; // Initial drawing speed
     const additionalDrawingSpeed = 0.75; // Additional drawing speed increase
-    const secondShiftPercentage = 2; // Second drawing shift
+    const shiftPercentage = 2; // Drawing shift percentage
+    const lineThicknessIncrease = 0.1; // Line thickness increase
     const backgroundColor = 'skyblue'; // Sky blue background color
 
     let currentPetal = 0;
-    let drawingShifted = false;
     let currentDrawingSpeed = initialDrawingSpeed;
 
     function drawStem() {
       ctx.strokeStyle = 'green';
+      ctx.lineWidth = 5; // Original stem line thickness
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
       ctx.lineTo(centerX, centerY + stemLength);
@@ -52,6 +53,7 @@
       const radianAngle = angle * (Math.PI / 180);
 
       ctx.strokeStyle = 'pink';
+      ctx.lineWidth = 5; // Original line thickness
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
 
@@ -74,19 +76,19 @@
 
       if (currentPetal < petalCount) {
         setTimeout(drawPetal, currentDrawingSpeed); // Adjusted delay
-      } else if (!drawingShifted) {
-        drawingShifted = true;
+      } else {
         currentPetal = 0;
         currentDrawingSpeed *= (1 + additionalDrawingSpeed); // Increase drawing speed
-        setTimeout(drawShiftedPetal, currentDrawingSpeed); // Start second drawing shift
+        drawShiftedPetal();
       }
     }
 
     function drawShiftedPetal() {
-      const angle = ((currentPetal * 360 / petalCount) + secondShiftPercentage) % 360;
+      const angle = (currentPetal * 360 / petalCount) % 360;
       const radianAngle = angle * (Math.PI / 180);
 
       ctx.strokeStyle = 'pink';
+      ctx.lineWidth = 5 + 5 * lineThicknessIncrease * currentPetal; // Increase line thickness
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
 
