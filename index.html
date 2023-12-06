@@ -13,13 +13,13 @@
       display: block;
     }
   </style>
-  <title>Pink Flower Drawing</title>
+  <title>Incremental Shifted Lines</title>
 </head>
 <body>
-  <canvas id="flowerCanvas"></canvas>
+  <canvas id="shiftedLinesCanvas"></canvas>
 
   <script>
-    const canvas = document.getElementById('flowerCanvas');
+    const canvas = document.getElementById('shiftedLinesCanvas');
     const ctx = canvas.getContext('2d');
 
     canvas.width = window.innerWidth;
@@ -27,101 +27,31 @@
 
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
-    const stemLength = 150; // Increased stem length
-    const petalCount = 5;
-    const petalRadius = 75; // Increased petal size
-    const initialDrawingSpeed = 560; // Initial drawing speed
-    const additionalDrawingSpeed = 0.75; // Additional drawing speed increase
+    const lineLength = 100; // Adjusted line length
+    const initialShiftPercentage = 2; // Initial shift percentage
     const shiftPercentageIncrement = 2; // Incremental shift percentage
-    const lineThicknessIncrease = 0.05; // Reverted to 5% line thickness increase
-    const backgroundColor = 'skyblue'; // Sky blue background color
+    const lineColor = 'black'; // Line color
 
-    let currentPetal = 0;
-    let currentDrawingSpeed = initialDrawingSpeed;
-    let currentShiftPercentage = 0;
+    function drawLineWithShift(shiftPercentage) {
+      const radianAngle = Math.PI / 4; // Adjusted angle (45 degrees)
 
-    function drawStem() {
-      ctx.strokeStyle = 'green';
-      ctx.lineWidth = 5; // Original stem line thickness
+      ctx.strokeStyle = lineColor;
+      ctx.lineWidth = 2; // Adjusted line width
       ctx.beginPath();
+
+      const shiftedX = centerX + (lineLength / 100) * shiftPercentage * Math.cos(radianAngle);
+      const shiftedY = centerY + (lineLength / 100) * shiftPercentage * Math.sin(radianAngle);
+
       ctx.moveTo(centerX, centerY);
-      ctx.lineTo(centerX, centerY + stemLength);
+      ctx.lineTo(shiftedX, shiftedY);
+
       ctx.stroke();
     }
 
-    function drawPetal() {
-      const angle = (currentPetal * 360 / petalCount) % 360;
-      const radianAngle = angle * (Math.PI / 180);
-
-      ctx.strokeStyle = 'pink';
-      ctx.lineWidth = 5; // Original line thickness
-      ctx.beginPath();
-      ctx.moveTo(centerX, centerY);
-
-      const x1 = centerX + petalRadius * Math.cos(radianAngle);
-      const y1 = centerY + petalRadius * Math.sin(radianAngle);
-      ctx.lineTo(x1, y1);
-
-      const petalBaseX = centerX + (petalRadius / 2) * Math.cos(radianAngle);
-      const petalBaseY = centerY + (petalRadius / 2) * Math.sin(radianAngle);
-
-      const shorterLineLength = petalRadius / 3;
-
-      ctx.lineTo(petalBaseX + shorterLineLength * Math.cos(radianAngle - Math.PI / 2), petalBaseY + shorterLineLength * Math.sin(radianAngle - Math.PI / 2));
-      ctx.moveTo(centerX, centerY);
-      ctx.lineTo(petalBaseX + shorterLineLength * Math.cos(radianAngle + Math.PI / 2), petalBaseY + shorterLineLength * Math.sin(radianAngle + Math.PI / 2));
-      
-      ctx.stroke();
-
-      currentPetal++;
-
-      if (currentPetal < petalCount) {
-        setTimeout(drawPetal, currentDrawingSpeed); // Adjusted delay
-      } else {
-        currentPetal = 0;
-        currentDrawingSpeed *= (1 + additionalDrawingSpeed); // Increase drawing speed
-        currentShiftPercentage += shiftPercentageIncrement; // Increment shift percentage
-        drawShiftedPetal();
-      }
-    }
-
-    function drawShiftedPetal() {
-      const angle = (currentPetal * 360 / petalCount) % 360;
-      const radianAngle = angle * (Math.PI / 180);
-
-      ctx.strokeStyle = 'pink';
-      ctx.lineWidth = 5; // Reverted line thickness
-      ctx.beginPath();
-      ctx.moveTo(centerX, centerY);
-
-      const shiftedX = centerX + (petalRadius / 100) * currentShiftPercentage * Math.cos(radianAngle);
-      const shiftedY = centerY + (petalRadius / 100) * currentShiftPercentage * Math.sin(radianAngle);
-
-      const x1 = shiftedX + petalRadius * Math.cos(radianAngle);
-      const y1 = shiftedY + petalRadius * Math.sin(radianAngle);
-
-      ctx.lineTo(x1, y1);
-
-      const petalBaseX = shiftedX + (petalRadius / 2) * Math.cos(radianAngle);
-      const petalBaseY = shiftedY + (petalRadius / 2) * Math.sin(radianAngle);
-
-      const shorterLineLength = petalRadius / 3;
-
-      ctx.lineTo(petalBaseX + shorterLineLength * Math.cos(radianAngle - Math.PI / 2), petalBaseY + shorterLineLength * Math.sin(radianAngle - Math.PI / 2));
-      ctx.moveTo(shiftedX, shiftedY);
-      ctx.lineTo(petalBaseX + shorterLineLength * Math.cos(radianAngle + Math.PI / 2), petalBaseY + shorterLineLength * Math.sin(radianAngle + Math.PI / 2));
-
-      ctx.stroke();
-
-      currentPetal++;
-
-      if (currentPetal < petalCount) {
-        setTimeout(drawShiftedPetal, currentDrawingSpeed); // Adjusted delay
-      }
-    }
-
-    drawStem();
-    setTimeout(drawPetal, 1000); // Initial delay
+    drawLineWithShift(initialShiftPercentage);
+    drawLineWithShift(initialShiftPercentage + shiftPercentageIncrement);
+    drawLineWithShift(initialShiftPercentage + 2 * shiftPercentageIncrement);
+    drawLineWithShift(initialShiftPercentage + 3 * shiftPercentageIncrement);
 
   </script>
 </body>
