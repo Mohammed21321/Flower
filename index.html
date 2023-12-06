@@ -70,8 +70,10 @@
       if (currentPetal < petalCount) {
         setTimeout(drawPetal, 750); // Reduced delay
       } else {
-        spinning = true;
-        spin();
+        if (!spinning) {
+          spinning = true;
+          spin();
+        }
       }
     }
 
