@@ -34,7 +34,6 @@
     const shiftPercentageIncrement = 2;
     const lineColor = 'pink';
     const petalLength = 300; // Adjusted length of the lines
-    const rotationSpeed = 0.02; // Adjusted rotation speed
 
     function drawStem() {
       ctx.strokeStyle = 'green';
@@ -54,30 +53,31 @@
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
 
+      const x1 = centerX + petalLength * Math.cos(startingAngle);
+      const y1 = centerY + petalLength * Math.sin(startingAngle);
+      ctx.lineTo(x1, y1);
+
       const petalBaseX = centerX + (petalRadius / 2) * Math.cos(startingAngle);
       const petalBaseY = centerY + (petalRadius / 2) * Math.sin(startingAngle);
 
-      let currentAngle = startingAngle;
-      let currentPetalLength = 0;
+      const shorterLineLength = petalRadius / 3;
 
-      const drawNextLine = () => {
-        currentPetalLength += 5; // Adjusted length increment
+      ctx.lineTo(
+        petalBaseX + shorterLineLength * Math.cos(startingAngle - Math.PI / 2),
+        petalBaseY + shorterLineLength * Math.sin(startingAngle - Math.PI / 2)
+      );
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(
+        petalBaseX + shorterLineLength * Math.cos(startingAngle + Math.PI / 2),
+        petalBaseY + shorterLineLength * Math.sin(startingAngle + Math.PI / 2)
+      );
 
-        if (currentPetalLength <= petalLength) {
-          const x = petalBaseX + currentPetalLength * Math.cos(currentAngle);
-          const y = petalBaseY + currentPetalLength * Math.sin(currentAngle);
-          ctx.lineTo(x, y);
-          ctx.stroke();
-          requestAnimationFrame(drawNextLine);
-        } else {
-          // Execute the callback function after drawing the petal
-          if (callback) {
-            setTimeout(callback, 1000); // Adjusted delay
-          }
-        }
-      };
+      ctx.stroke();
 
-      drawNextLine();
+      // Execute the callback function after drawing the petal
+      if (callback) {
+        setTimeout(callback, 1000); // Adjusted delay
+      }
     }
 
     function drawFlowerWithShifts() {
