@@ -7,58 +7,58 @@
     body {
       margin: 0;
       overflow: hidden;
-      background-color: skyblue; /* Updated background color to sky blue */
+      background-color: skyblue;
     }
     canvas {
       display: block;
     }
   </style>
-  <title>Complete Flower Drawing</title>
+  <title>Flower Drawing</title>
 </head>
 <body>
   <canvas id="flowerCanvas"></canvas>
 
   <script>
-    const canvas = document.getElementById('flowerCanvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.getElementById("flowerCanvas");
+    const ctx = canvas.getContext("2d");
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    function createPetal(length, width) {
+      const path = new Path2D();
+      path.moveTo(0, 0);
+      path.lineTo(length * 0.3, -width);
+      path.lineTo(length * 0.8, -width);
+      path.lineTo(length, 0);
+      path.lineTo(length * 0.8, width);
+      path.lineTo(length * 0.3, width);
+      path.closePath();
+      path.moveTo(0, 0);
+      path.lineTo(length, 0);
+      return path;
+    }
 
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const lineColor = 'pink';
-    const delay = 500; // Delay between drawing lines in milliseconds
+    function drawPetals(x, y, count, startAt, petal) {
+      const step = (Math.PI * 2) / count;
+      ctx.setTransform(1, 0, 0, 1, x, y);
+      ctx.rotate(startAt);
+      for (let i = 0; i < count; i += 1) {
+        ctx.stroke(petal);
+        ctx.rotate(step);
+      }
+      ctx.setTransform(1, 0, 0, 1, 0, 0);  // restore default
+    }
 
-    function drawLineWithDelay(startX, startY, endX, endY, delayTime, callback) {
-      ctx.strokeStyle = lineColor;
-      ctx.lineWidth = 5;
+    function drawFlower(col, lineWidth, fitScale, petalCount) {
+      ctx.strokeStyle = col;
+      ctx.lineWidth = lineWidth;
+      const size = Math.min(ctx.canvas.width, ctx.canvas.height) * fitScale * 0.5;
+      drawPetals(ctx.canvas.width / 2, ctx.canvas.height / 2, petalCount, 0, createPetal(size, size * 0.2));
       ctx.beginPath();
-      ctx.moveTo(startX, startY);
-      ctx.lineTo(endX, endY);
-      ctx.stroke();
-
-      setTimeout(callback, delayTime);
+      ctx.arc(ctx.canvas.width / 2, ctx.canvas.height / 2, size * 0.15, 0, Math.PI * 2);
+      ctx.fillStyle = col;
+      ctx.fill();
     }
 
-    function drawFlower() {
-      // Draw petals
-      drawLineWithDelay(centerX, centerY, centerX, centerY - 100, delay, function() {
-        drawLineWithDelay(centerX, centerY, centerX + 50, centerY - 50, delay, function() {
-          drawLineWithDelay(centerX, centerY, centerX + 100, centerY, delay, function() {
-            drawLineWithDelay(centerX, centerY, centerX + 50, centerY + 50, delay, function() {
-              drawLineWithDelay(centerX, centerY, centerX, centerY + 100, delay, function() {
-                // Draw stem
-                drawLineWithDelay(centerX, centerY, centerX, centerY + 150, delay, null);
-              });
-            });
-          });
-        });
-      });
-    }
-
-    drawFlower();
-
+    drawFlower("pink", 4, 0.95, 5);
   </script>
 </body>
 </html>
