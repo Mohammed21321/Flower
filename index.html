@@ -33,6 +33,7 @@
     const initialShiftPercentage = 2;
     const shiftPercentageIncrement = 2;
     const lineColor = 'pink';
+    const petalLength = 300; // Adjusted length of the lines
 
     function drawStem() {
       ctx.strokeStyle = 'green';
@@ -52,8 +53,8 @@
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
 
-      const x1 = centerX + petalRadius * Math.cos(startingAngle);
-      const y1 = centerY + petalRadius * Math.sin(startingAngle);
+      const x1 = centerX + petalLength * Math.cos(startingAngle);
+      const y1 = centerY + petalLength * Math.sin(startingAngle);
       ctx.lineTo(x1, y1);
 
       const petalBaseX = centerX + (petalRadius / 2) * Math.cos(startingAngle);
@@ -100,3 +101,4 @@
   </script>
 </body>
 </html>
+
