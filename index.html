@@ -44,31 +44,31 @@
     }
 
     function drawPetalWithShift(shiftPercentage) {
-      const angle = (360 / petalCount) % 360;
-      const radianAngle = angle * (Math.PI / 180);
+      const angle = (360 / petalCount) * Math.PI / 180;
+      const startingAngle = angle * shiftPercentage / 100;
 
       ctx.strokeStyle = lineColor;
       ctx.lineWidth = 5;
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
 
-      const x1 = centerX + petalRadius * Math.cos(radianAngle);
-      const y1 = centerY + petalRadius * Math.sin(radianAngle);
+      const x1 = centerX + petalRadius * Math.cos(startingAngle);
+      const y1 = centerY + petalRadius * Math.sin(startingAngle);
       ctx.lineTo(x1, y1);
 
-      const petalBaseX = centerX + (petalRadius / 2) * Math.cos(radianAngle);
-      const petalBaseY = centerY + (petalRadius / 2) * Math.sin(radianAngle);
+      const petalBaseX = centerX + (petalRadius / 2) * Math.cos(startingAngle);
+      const petalBaseY = centerY + (petalRadius / 2) * Math.sin(startingAngle);
 
       const shorterLineLength = petalRadius / 3;
 
       ctx.lineTo(
-        petalBaseX + shorterLineLength * Math.cos(radianAngle - Math.PI / 2),
-        petalBaseY + shorterLineLength * Math.sin(radianAngle - Math.PI / 2)
+        petalBaseX + shorterLineLength * Math.cos(startingAngle - Math.PI / 2),
+        petalBaseY + shorterLineLength * Math.sin(startingAngle - Math.PI / 2)
       );
       ctx.moveTo(centerX, centerY);
       ctx.lineTo(
-        petalBaseX + shorterLineLength * Math.cos(radianAngle + Math.PI / 2),
-        petalBaseY + shorterLineLength * Math.sin(radianAngle + Math.PI / 2)
+        petalBaseX + shorterLineLength * Math.cos(startingAngle + Math.PI / 2),
+        petalBaseY + shorterLineLength * Math.sin(startingAngle + Math.PI / 2)
       );
 
       ctx.stroke();
