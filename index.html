@@ -32,6 +32,7 @@
     const petalRadius = 50;
 
     let currentPetal = 0;
+    let spinning = false;
 
     function drawStem() {
       ctx.strokeStyle = 'green';
@@ -67,8 +68,21 @@
       currentPetal++;
 
       if (currentPetal < petalCount) {
-        setTimeout(drawPetal, 1000); // Adjust delay in milliseconds
+        setTimeout(drawPetal, 750); // Reduced delay
+      } else {
+        spinning = true;
+        spin();
       }
+    }
+
+    function spin() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate((spinning ? 2 : 0) * Math.PI / 180); // Spin continuously
+      drawStem();
+      ctx.restore();
+      requestAnimationFrame(spin);
     }
 
     drawStem();
