@@ -13,7 +13,7 @@
       display: block;
     }
   </style>
-  <title>Sequential Line Drawing</title>
+  <title>Flower-Like Line Drawing</title>
 </head>
 <body>
   <canvas id="flowerCanvas"></canvas>
@@ -48,23 +48,23 @@
       ctx.strokeStyle = lineColor;
       ctx.lineWidth = 5;
       ctx.beginPath();
-      ctx.moveTo(startX, startY);
-
+      ctx.moveTo(centerX, centerY - stemLength);
+      
       const lineLength = 100; // Adjust the length of the lines
 
-      const x1 = startX + lineLength * Math.cos(startingAngle);
-      const y1 = startY + lineLength * Math.sin(startingAngle);
+      const x1 = centerX + lineLength * Math.cos(startingAngle);
+      const y1 = centerY - stemLength + lineLength * Math.sin(startingAngle);
       ctx.lineTo(x1, y1);
 
       const shorterLineLength = lineLength / 2;
 
-      ctx.moveTo(startX, startY);
+      ctx.moveTo(centerX, centerY - stemLength);
       ctx.lineTo(
         x1 + shorterLineLength * Math.cos(startingAngle - Math.PI / 2),
         y1 + shorterLineLength * Math.sin(startingAngle - Math.PI / 2)
       );
 
-      ctx.moveTo(startX, startY);
+      ctx.moveTo(centerX, centerY - stemLength);
       ctx.lineTo(
         x1 + shorterLineLength * Math.cos(startingAngle + Math.PI / 2),
         y1 + shorterLineLength * Math.sin(startingAngle + Math.PI / 2)
