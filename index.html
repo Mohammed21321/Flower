@@ -33,7 +33,7 @@
     const initialShiftPercentage = 2;
     const shiftPercentageIncrement = 2;
     const lineColor = 'pink';
-    const petalLength = 300; // Adjusted length of the lines
+    const petalLength = 100; // Reverted to the original shorter length
 
     function drawStem() {
       ctx.strokeStyle = 'green';
@@ -44,21 +44,21 @@
       ctx.stroke();
     }
 
-    function drawPetalWithShift(shiftPercentage, callback) {
+    function drawPetalWithShift(startX, startY, shiftPercentage, callback) {
       const angle = (360 / petalCount) * Math.PI / 180;
       const startingAngle = angle * shiftPercentage / 100;
 
       ctx.strokeStyle = lineColor;
       ctx.lineWidth = 5;
       ctx.beginPath();
-      ctx.moveTo(centerX, centerY);
+      ctx.moveTo(startX, startY);
 
-      const x1 = centerX + petalLength * Math.cos(startingAngle);
-      const y1 = centerY + petalLength * Math.sin(startingAngle);
+      const x1 = startX + petalLength * Math.cos(startingAngle);
+      const y1 = startY + petalLength * Math.sin(startingAngle);
       ctx.lineTo(x1, y1);
 
-      const petalBaseX = centerX + (petalRadius / 2) * Math.cos(startingAngle);
-      const petalBaseY = centerY + (petalRadius / 2) * Math.sin(startingAngle);
+      const petalBaseX = startX + (petalRadius / 2) * Math.cos(startingAngle);
+      const petalBaseY = startY + (petalRadius / 2) * Math.sin(startingAngle);
 
       const shorterLineLength = petalRadius / 3;
 
@@ -66,7 +66,7 @@
         petalBaseX + shorterLineLength * Math.cos(startingAngle - Math.PI / 2),
         petalBaseY + shorterLineLength * Math.sin(startingAngle - Math.PI / 2)
       );
-      ctx.moveTo(centerX, centerY);
+      ctx.moveTo(startX, startY);
       ctx.lineTo(
         petalBaseX + shorterLineLength * Math.cos(startingAngle + Math.PI / 2),
         petalBaseY + shorterLineLength * Math.sin(startingAngle + Math.PI / 2)
@@ -82,18 +82,25 @@
 
     function drawFlowerWithShifts() {
       drawStem();
-      let currentIndex = 0;
+      const initialX = centerX;
+      const initialY = centerY + stemLength;
 
-      function drawNextPetal() {
-        if (currentIndex < petalCount) {
-          drawPetalWithShift(initialShiftPercentage + currentIndex * shiftPercentageIncrement, function() {
-            currentIndex++;
-            drawNextPetal();
-          });
+      // Draw initial line
+      drawPetalWithShift(initialX, initialY, initialShiftPercentage, function() {
+        let currentIndex = 0;
+
+        // Draw copies of the initial line at different positions
+        function drawCopies() {
+          if (currentIndex < petalCount - 1) {
+            drawPetalWithShift(initialX, initialY, initialShiftPercentage + (currentIndex + 1) * shiftPercentageIncrement, function() {
+              currentIndex++;
+              drawCopies();
+            });
+          }
         }
-      }
 
-      drawNextPetal();
+        drawCopies();
+      });
     }
 
     drawFlowerWithShifts();
