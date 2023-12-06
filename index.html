@@ -13,7 +13,7 @@
       display: block;
     }
   </style>
-  <title>Flower-Like Line Drawing</title>
+  <title>Complete Flower Drawing</title>
 </head>
 <body>
   <canvas id="flowerCanvas"></canvas>
@@ -42,11 +42,15 @@
     }
 
     function drawFlower() {
+      // Draw petals
       drawLineWithDelay(centerX, centerY, centerX, centerY - 100, delay, function() {
         drawLineWithDelay(centerX, centerY, centerX + 50, centerY - 50, delay, function() {
           drawLineWithDelay(centerX, centerY, centerX + 100, centerY, delay, function() {
             drawLineWithDelay(centerX, centerY, centerX + 50, centerY + 50, delay, function() {
-              drawLineWithDelay(centerX, centerY, centerX, centerY + 100, delay, null);
+              drawLineWithDelay(centerX, centerY, centerX, centerY + 100, delay, function() {
+                // Draw stem
+                drawLineWithDelay(centerX, centerY, centerX, centerY + 150, delay, null);
+              });
             });
           });
         });
