@@ -79,7 +79,7 @@
     }
 
     function drawShiftedPetal() {
-      const angle = (currentPetal * 360 / petalCount) % 360;
+      const angle = ((currentPetal * 360 / petalCount) + secondShiftPercentage) % 360;
       const radianAngle = angle * (Math.PI / 180);
 
       ctx.strokeStyle = 'pink';
@@ -109,4 +109,8 @@
     }
 
     drawStem();
-    setTimeout(drawPetal, 1000); // Initial de
+    setTimeout(drawPetal, 1000); // Initial delay
+
+  </script>
+</body>
+</html>
