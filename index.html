@@ -7,7 +7,7 @@
     body {
       margin: 0;
       overflow: hidden;
-      background-color: #f0f0f0; /* Background color */
+      background-color: skyblue; /* Updated background color to sky blue */
     }
     canvas {
       display: block;
@@ -30,11 +30,14 @@
     const stemLength = 150; // Increased stem length
     const petalCount = 5;
     const petalRadius = 75; // Increased petal size
-    const drawingSpeed = 560; // 25% faster drawing
+    const initialDrawingSpeed = 560; // Initial drawing speed
+    const additionalDrawingSpeed = 0.75; // Additional drawing speed increase
     const secondShiftPercentage = 2; // Second drawing shift
+    const backgroundColor = 'skyblue'; // Sky blue background color
 
     let currentPetal = 0;
     let drawingShifted = false;
+    let currentDrawingSpeed = initialDrawingSpeed;
 
     function drawStem() {
       ctx.strokeStyle = 'green';
@@ -70,11 +73,12 @@
       currentPetal++;
 
       if (currentPetal < petalCount) {
-        setTimeout(drawPetal, drawingSpeed); // Adjusted delay
+        setTimeout(drawPetal, currentDrawingSpeed); // Adjusted delay
       } else if (!drawingShifted) {
         drawingShifted = true;
         currentPetal = 0;
-        setTimeout(drawShiftedPetal, drawingSpeed); // Start second drawing shift
+        currentDrawingSpeed *= (1 + additionalDrawingSpeed); // Increase drawing speed
+        setTimeout(drawShiftedPetal, currentDrawingSpeed); // Start second drawing shift
       }
     }
 
@@ -104,7 +108,7 @@
       currentPetal++;
 
       if (currentPetal < petalCount) {
-        setTimeout(drawShiftedPetal, drawingSpeed); // Adjusted delay
+        setTimeout(drawShiftedPetal, currentDrawingSpeed); // Adjusted delay
       }
     }
 
