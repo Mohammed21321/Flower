@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #f0f0f0; /* Background color */
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+  <title>Pink Flower Drawing</title>
+</head>
+<body>
+  <canvas id="flowerCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById('flowerCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Draw a simple pink flower with looping lines
+    ctx.strokeStyle = 'pink';
+
+    // Function to draw a line with animation
+    function drawLine(x1, y1, x2, y2) {
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+
+    // Function to draw a petal
+    function drawPetal(x, y, radius, angle) {
+      drawLine(x, y, x + radius * Math.cos(angle), y + radius * Math.sin(angle));
+    }
+
+    // Draw stem
+    ctx.strokeStyle = 'green';
+    drawLine(canvas.width / 2, canvas.height / 2, canvas.width / 2, canvas.height / 2 + 100);
+
+    // Draw petals with animation
+    const petalRadius = 50;
+    const petalCount = 6;
+
+    function animate() {
+      let angle = 0;
+
+      function drawPetalLoop() {
+        if (angle < Math.PI * 2) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas for animation
+          drawLine(canvas.width / 2, canvas.height / 2, canvas.width / 2, canvas.height / 2 + 100); // Redraw stem
+          for (let i = 0; i < petalCount; i++) {
+            drawPetal(canvas.width / 2, canvas.height / 2, petalRadius, angle + (i * 2 * Math.PI) / petalCount);
+          }
+          angle += 0.02; // Adjust the speed of animation
+          requestAnimationFrame(drawPetalLoop);
+        }
+      }
+
+      drawPetalLoop();
+    }
+
+    animate(); // Start the animation
+  </script>
+</body>
+</html>
