@@ -32,6 +32,15 @@
     const shiftPercentageIncrement = 2;
     const lineColor = 'pink';
 
+    function drawStem() {
+      ctx.strokeStyle = 'green';
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(centerX, centerY + stemLength);
+      ctx.stroke();
+    }
+
     function drawLineWithShift(startX, startY, shiftPercentage, callback) {
       const angle = 0;
       const startingAngle = angle * shiftPercentage / 100;
@@ -71,7 +80,7 @@
 
     function drawFlowerLinesWithShifts(shift, currentIndex, maxShift, callback) {
       if (shift <= maxShift) {
-        drawLineWithShift(centerX, centerY, shift, function() {
+        drawLineWithShift(centerX, centerY - stemLength, shift, function() {
           drawFlowerLinesWithShifts(shift + 2, currentIndex + 1, maxShift, callback);
         });
       } else if (currentIndex < 4) {
@@ -86,9 +95,8 @@
     }
 
     function drawFlower() {
-      drawLineWithShift(centerX, centerY - stemLength, initialShiftPercentage, function() {
-        drawFlowerLinesWithShifts(initialShiftPercentage + shiftPercentageIncrement, 0, 10, null);
-      });
+      drawStem();
+      drawFlowerLinesWithShifts(initialShiftPercentage + shiftPercentageIncrement, 0, 10, null);
     }
 
     drawFlower();
