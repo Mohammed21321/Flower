@@ -90,7 +90,7 @@
       const radianAngle = angle * (Math.PI / 180);
 
       ctx.strokeStyle = 'pink';
-      ctx.lineWidth = 5 + 5 * lineThicknessIncrease * currentPetal; // Increase line thickness
+      ctx.lineWidth = 5; // Reverted line thickness
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
 
