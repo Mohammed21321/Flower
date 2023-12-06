@@ -13,7 +13,7 @@
       display: block;
     }
   </style>
-  <title>Incremental Shifted Flower</title>
+  <title>Sequential Petal Drawing</title>
 </head>
 <body>
   <canvas id="flowerCanvas"></canvas>
@@ -43,7 +43,7 @@
       ctx.stroke();
     }
 
-    function drawPetalWithShift(shiftPercentage) {
+    function drawPetalWithShift(shiftPercentage, callback) {
       const angle = (360 / petalCount) * Math.PI / 180;
       const startingAngle = angle * shiftPercentage / 100;
 
@@ -72,13 +72,25 @@
       );
 
       ctx.stroke();
+
+      // Execute the callback function after drawing the petal
+      if (callback) {
+        setTimeout(callback, 1000); // Adjusted delay
+      }
     }
 
     function drawFlowerWithShifts() {
       drawStem();
-      for (let i = 0; i < petalCount; i++) {
-        drawPetalWithShift(initialShiftPercentage + i * shiftPercentageIncrement);
+      let currentIndex = 0;
+
+      function drawNextPetal() {
+        if (currentIndex < petalCount) {
+          drawPetalWithShift(initialShiftPercentage + currentIndex * shiftPercentageIncrement, drawNextPetal);
+          currentIndex++;
+        }
       }
+
+      drawNextPetal();
     }
 
     drawFlowerWithShifts();
