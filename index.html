@@ -25,49 +25,44 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Draw a simple pink flower with looping lines
-    ctx.strokeStyle = 'pink';
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const stemLength = 100;
+    const petalCount = 5;
+    const petalRadius = 50;
 
-    // Function to draw a line with animation
-    function drawLine(x1, y1, x2, y2) {
+    let currentPetal = 0;
+
+    function drawStem() {
+      ctx.strokeStyle = 'green';
       ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(centerX, centerY + stemLength);
       ctx.stroke();
     }
 
-    // Function to draw a petal
-    function drawPetal(x, y, radius, angle) {
-      drawLine(x, y, x + radius * Math.cos(angle), y + radius * Math.sin(angle));
-    }
+    function drawPetal() {
+      const angle = (currentPetal * 360 / petalCount) % 360;
+      const radianAngle = angle * (Math.PI / 180);
 
-    // Draw stem
-    ctx.strokeStyle = 'green';
-    drawLine(canvas.width / 2, canvas.height / 2, canvas.width / 2, canvas.height / 2 + 100);
+      ctx.strokeStyle = 'pink';
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      const x1 = centerX + petalRadius * Math.cos(radianAngle);
+      const y1 = centerY + petalRadius * Math.sin(radianAngle);
+      ctx.lineTo(x1, y1);
+      ctx.stroke();
 
-    // Draw petals with animation
-    const petalRadius = 50;
-    const petalCount = 6;
+      currentPetal++;
 
-    function animate() {
-      let angle = 0;
-
-      function drawPetalLoop() {
-        if (angle < Math.PI * 2) {
-          ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas for animation
-          drawLine(canvas.width / 2, canvas.height / 2, canvas.width / 2, canvas.height / 2 + 100); // Redraw stem
-          for (let i = 0; i < petalCount; i++) {
-            drawPetal(canvas.width / 2, canvas.height / 2, petalRadius, angle + (i * 2 * Math.PI) / petalCount);
-          }
-          angle += 0.02; // Adjust the speed of animation
-          requestAnimationFrame(drawPetalLoop);
-        }
+      if (currentPetal < petalCount) {
+        setTimeout(drawPetal, 1000); // Adjust delay in milliseconds
       }
-
-      drawPetalLoop();
     }
 
-    animate(); // Start the animation
+    drawStem();
+    setTimeout(drawPetal, 1000); // Initial delay
+
   </script>
 </body>
 </html>
