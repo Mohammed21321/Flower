@@ -32,14 +32,13 @@
     const petalRadius = 75; // Increased petal size
     const initialDrawingSpeed = 560; // Initial drawing speed
     const additionalDrawingSpeed = 0.75; // Additional drawing speed increase
-    const shiftPercentage = 4; // Initial drawing shift percentage
     const shiftPercentageIncrement = 2; // Incremental shift percentage
     const lineThicknessIncrease = 0.05; // Reverted to 5% line thickness increase
     const backgroundColor = 'skyblue'; // Sky blue background color
 
     let currentPetal = 0;
     let currentDrawingSpeed = initialDrawingSpeed;
-    let currentShiftPercentage = shiftPercentage;
+    let currentShiftPercentage = 0;
 
     function drawStem() {
       ctx.strokeStyle = 'green';
@@ -81,6 +80,7 @@
       } else {
         currentPetal = 0;
         currentDrawingSpeed *= (1 + additionalDrawingSpeed); // Increase drawing speed
+        currentShiftPercentage += shiftPercentageIncrement; // Increment shift percentage
         drawShiftedPetal();
       }
     }
@@ -114,7 +114,6 @@
       ctx.stroke();
 
       currentPetal++;
-      currentShiftPercentage += shiftPercentageIncrement; // Increment shift percentage
 
       if (currentPetal < petalCount) {
         setTimeout(drawShiftedPetal, currentDrawingSpeed); // Adjusted delay
